@@ -1,10 +1,8 @@
 package com.udacity.shoestore.screens.products.shoelist
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import com.udacity.shoestore.R
@@ -12,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.udacity.shoestore.MainActivity
 import com.udacity.shoestore.databinding.ActivityMainBinding
 import com.udacity.shoestore.databinding.FragmentShoeListBinding
 
@@ -28,8 +27,15 @@ class ShoeListFragment : Fragment() {
 
         setupFragmentConfigurations(inflater, container)
         setupNavigationControllerForActionBar()
+        setupMenuOptions()
+
+        //(activity as MainActivity).setupHamburgerMenuDrawer()
 
         return binding.root
+    }
+
+    private fun setupMenuOptions() {
+        this.setHasOptionsMenu(true)
     }
 
     private fun setupFragmentConfigurations(inflater: LayoutInflater, container: ViewGroup?) {
@@ -52,6 +58,11 @@ class ShoeListFragment : Fragment() {
 
     private fun addNavigationControllerListener() {
         navigationController.addOnDestinationChangedListener(navigationListener)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.overflow_menu, menu)
     }
 
 }

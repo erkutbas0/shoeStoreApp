@@ -10,11 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.udacity.shoestore.R
+import com.udacity.shoestore.baseModules.BaseNavigationFlows
 import com.udacity.shoestore.databinding.FragmentWelcomeBinding
 import com.udacity.shoestore.screens.models.NavigationFragmentTypes
 import timber.log.Timber
 
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : Fragment(), BaseNavigationFlows {
 
     private lateinit var binding: FragmentWelcomeBinding
     private lateinit var viewModel: WelcomeViewModel
@@ -47,7 +48,7 @@ class WelcomeFragment : Fragment() {
         viewModel.onNextClicked.observe(this.viewLifecycleOwner, nextButtonObserver)
     }
 
-    private fun gotoFragment(type: NavigationFragmentTypes) {
+    override fun gotoFragment(type: NavigationFragmentTypes) {
         when(type) {
             NavigationFragmentTypes.INSTRUCTION -> {
                 viewModel.nextPageDirected()

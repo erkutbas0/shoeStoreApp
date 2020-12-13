@@ -5,56 +5,102 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.findFragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.udacity.shoestore.R
+import com.udacity.shoestore.databinding.FragmentAuthenticationBinding
+import kotlinx.android.synthetic.main.fragment_authentication.*
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.tabs.TabLayout
+import com.udacity.shoestore.screens.models.NavigationFragmentTypes
+import timber.log.Timber
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.udacity.shoestore.baseModules.BaseNavigationFlows
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class AuthenticationFragment : Fragment(), BaseNavigationFlows {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AuthenticationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AuthenticationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentAuthenticationBinding
+    private lateinit var viewModel: AuthenticationViewModel
+    private lateinit var viewModelFactory: AuthenticationViewModelFactory
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var authenticationPagerAdapter: AuthenticationFragmentAdapter
+    private lateinit var viewPager2: ViewPager2
+
+    private val zozo = object : DenemeLog {
+        override fun takasi() {
+            Timber.i("sonunda")
+            findNavController().navigate(AuthenticationFragmentDirections.actionAuthenticationFragmentToWelcomeFragment())
         }
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_authentication, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_authentication, container, false)
+
+        viewModelFactory = AuthenticationViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AuthenticationViewModel::class.java)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+
+        addViewModelListeners()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AuthenticationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AuthenticationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        authenticationPagerAdapter = AuthenticationFragmentAdapter(this, zozo)
+        viewPager2 = this.authenticationViewPager
+        viewPager2.adapter = authenticationPagerAdapter
+
+        TabLayoutMediator(authenticationTabLayout, viewPager2) { tab, position ->
+            setTabLayoutTitles(tab, position)
+            viewPager2.setCurrentItem(tab.position, true)
+
+        }.attach()
+
     }
+
+    private fun setTabLayoutTitles(tab: TabLayout.Tab, position: Int) {
+        when(position) {
+            0 -> tab.text = "Sign In"
+            1 -> tab.text = "Sing Up"
+        }
+    }
+
+    private var nextButtonObserver = Observer<Boolean> { nextPressed ->
+        if (nextPressed) {
+            gotoFragment(NavigationFragmentTypes.WELCOME)
+        }
+    }
+
+    private fun addViewModelListeners() {
+        viewModel.onTestClicked.observe(this.viewLifecycleOwner, nextButtonObserver)
+    }
+
+    override fun gotoFragment(type: NavigationFragmentTypes) {
+        when(type) {
+            NavigationFragmentTypes.WELCOME -> {
+                viewModel.nextPageDirected()
+                Timber.i("Ahanda buradayiz")
+            }
+            else -> {
+                Timber.i("missing type")
+            }
+        }
+    }
+
+    private fun addLoginFragmentListeners() {
+    }
+
 }
