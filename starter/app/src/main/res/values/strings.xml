@@ -14,6 +14,7 @@
     <string name="fragment_welcome_title">Welcome</string>
     <string name="fragment_instructions_title">Instructions</string>
     <string name="start_shoe_store_application">Start Shoe Store Application</string>
+    <string name="register_button_text">Register</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">sign_up</string>
 </resources>

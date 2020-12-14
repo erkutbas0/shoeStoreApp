@@ -9,12 +9,13 @@ import androidx.navigation.ui.NavigationUI
 import com.udacity.shoestore.databinding.ActivityMainBinding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,37 +25,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupActivityConfigurations() {
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
-        drawerLayout = binding.mainActivityDrawerLayout
         navigationController = this.findNavController(R.id.shoeStoreNavigation)
     }
 
     private fun setupNavigationControllerForActionBar() {
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.welcomeFragment, R.id.loginFragment, R.id.instructionFragment, R.id.authenticationFragment, R.id.shoeList))
-        NavigationUI.setupActionBarWithNavController(this, navigationController, appBarConfiguration)
-        //NavigationUI.setupActionBarWithNavController(this, navigationController, drawerLayout)
-        //NavigationUI.setupWithNavController(binding.shoeListHamburgerMenu, navigationController)
-        //addNavigationControllerListener()
-
-
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.authenticationFragment,
+                R.id.welcomeFragment,
+                R.id.instructionFragment,
+                R.id.shoeListFragment
+            )
+        )
+        NavigationUI.setupActionBarWithNavController(
+            this,
+            navigationController,
+            appBarConfiguration
+        )
     }
-
-    fun setupHamburgerMenuDrawer() {
-        NavigationUI.setupActionBarWithNavController(this, navigationController, drawerLayout)
-        NavigationUI.setupWithNavController(binding.shoeListHamburgerMenu, navigationController)
-    }
-
-    /*private var navigationListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
-        when(destination.id) {
-            controller.graph.startDestination -> drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            else -> drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        }
-    }*/
-
-    /*private fun addNavigationControllerListener() {
-        navigationController.addOnDestinationChangedListener(navigationListener)
-    }*/
 
     override fun onSupportNavigateUp(): Boolean {
-        return navigationController.navigateUp()
+        return navigationController.navigateUp(appBarConfiguration)
     }
 }
