@@ -2,6 +2,7 @@ package com.udacity.shoestore.screens.products.shoelist
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -28,6 +29,7 @@ class ShoeListFragment : Fragment() {
         setupFragmentConfigurations(inflater, container)
         setupNavigationControllerForActionBar()
         setupMenuOptions()
+        disableBackButton()
 
         //(activity as MainActivity).setupHamburgerMenuDrawer()
 
@@ -63,6 +65,16 @@ class ShoeListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return NavigationUI.onNavDestinationSelected(item, findNavController()) || super.onOptionsItemSelected(item)
+    }
+
+    private fun disableBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback {
+            activity?.finish()
+        }
     }
 
 }

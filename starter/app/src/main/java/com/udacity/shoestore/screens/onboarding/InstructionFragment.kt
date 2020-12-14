@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
@@ -35,6 +36,7 @@ class InstructionFragment : Fragment(), BaseNavigationFlows {
         binding.viewModel = viewModel
 
         addViewModelListeners()
+        disableBackButton()
 
         return binding.root
     }
@@ -59,6 +61,12 @@ class InstructionFragment : Fragment(), BaseNavigationFlows {
             else -> {
                 Timber.i("missing type")
             }
+        }
+    }
+
+    private fun disableBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback {
+            // leave empty
         }
     }
 

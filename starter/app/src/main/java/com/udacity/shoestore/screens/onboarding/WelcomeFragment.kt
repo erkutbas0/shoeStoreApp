@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +35,7 @@ class WelcomeFragment : Fragment(), BaseNavigationFlows {
         binding.lifecycleOwner = this
 
         addViewModelListeners()
+        disableBackButton()
 
         return binding.root
     }
@@ -59,4 +61,11 @@ class WelcomeFragment : Fragment(), BaseNavigationFlows {
             }
         }
     }
+
+    private fun disableBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback {
+            // leave empty
+        }
+    }
+
 }

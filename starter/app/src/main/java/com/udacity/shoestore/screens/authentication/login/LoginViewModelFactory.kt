@@ -1,4 +1,4 @@
-package com.udacity.shoestore.screens.authentication
+package com.udacity.shoestore.screens.authentication.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

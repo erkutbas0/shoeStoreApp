@@ -1,12 +1,12 @@
-package com.udacity.shoestore.screens.authentication
+package com.udacity.shoestore.screens.authentication.authorization
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.udacity.shoestore.R
@@ -19,6 +19,8 @@ import timber.log.Timber
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.udacity.shoestore.baseModules.BaseNavigationFlows
+import com.udacity.shoestore.screens.authentication.authorization.AuthenticationFragmentDirections
+import com.udacity.shoestore.screens.authentication.protocols.ViewPagerListeners
 
 class AuthenticationFragment : Fragment(), BaseNavigationFlows {
 
@@ -29,10 +31,15 @@ class AuthenticationFragment : Fragment(), BaseNavigationFlows {
     private lateinit var authenticationPagerAdapter: AuthenticationFragmentAdapter
     private lateinit var viewPager2: ViewPager2
 
-    private val zozo = object : DenemeLog {
-        override fun takasi() {
-            Timber.i("sonunda")
-            findNavController().navigate(AuthenticationFragmentDirections.actionAuthenticationFragmentToWelcomeFragment())
+    private val listener = object : ViewPagerListeners {
+        override fun viewPagerOnClicked(type: NavigationFragmentTypes) {
+            when(type) {
+                NavigationFragmentTypes.LOGIN -> Timber.i("Login button clicked")
+                NavigationFragmentTypes.REGISTRATIION -> Timber.i("Registration button clicked")
+                else -> {
+                    Timber.i("We do not know")
+                }
+            }
         }
 
     }
@@ -52,6 +59,7 @@ class AuthenticationFragment : Fragment(), BaseNavigationFlows {
         binding.lifecycleOwner = this
 
         addViewModelListeners()
+        enableBackButton()
 
         return binding.root
     }
@@ -59,7 +67,7 @@ class AuthenticationFragment : Fragment(), BaseNavigationFlows {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authenticationPagerAdapter = AuthenticationFragmentAdapter(this, zozo)
+        authenticationPagerAdapter = AuthenticationFragmentAdapter(this, listener)
         viewPager2 = this.authenticationViewPager
         viewPager2.adapter = authenticationPagerAdapter
 
@@ -100,7 +108,10 @@ class AuthenticationFragment : Fragment(), BaseNavigationFlows {
         }
     }
 
-    private fun addLoginFragmentListeners() {
+    private fun enableBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback {
+            activity?.finish()
+        }
     }
 
 }

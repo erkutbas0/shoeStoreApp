@@ -1,4 +1,4 @@
-package com.udacity.shoestore.screens.authentication
+package com.udacity.shoestore.screens.authentication.authorization
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,15 +1,15 @@
-package com.udacity.shoestore.screens.authentication
+package com.udacity.shoestore.screens.authentication.registration
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
-class LoginViewModel: ViewModel() {
+class RegistrationViewModel: ViewModel() {
 
     private var _onNextClicked = MutableLiveData<Boolean>()
     val onNextClicked: LiveData<Boolean>
-    get() = _onNextClicked
+        get() = _onNextClicked
 
     init {
         _onNextClicked.value = false
@@ -19,8 +19,8 @@ class LoginViewModel: ViewModel() {
         super.onCleared()
     }
 
-    fun loginButtonClicked() {
-        Timber.i("Login Button Clicked")
+    fun registrationButtonClicked() {
+        Timber.i("Registration Button Clicked")
         _onNextClicked.value = true
     }
 

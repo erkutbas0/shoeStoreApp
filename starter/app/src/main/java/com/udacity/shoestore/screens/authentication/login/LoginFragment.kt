@@ -1,10 +1,12 @@
-package com.udacity.shoestore.screens.authentication
+package com.udacity.shoestore.screens.authentication.login
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.core.app.SharedElementCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,16 +14,16 @@ import androidx.navigation.fragment.findNavController
 import com.udacity.shoestore.R
 import com.udacity.shoestore.baseModules.BaseNavigationFlows
 import com.udacity.shoestore.databinding.FragmentLoginBinding
+import com.udacity.shoestore.screens.authentication.authorization.AuthenticationFragmentDirections
+import com.udacity.shoestore.screens.authentication.protocols.ViewPagerListeners
 import com.udacity.shoestore.screens.models.NavigationFragmentTypes
 import timber.log.Timber
 
-class LoginFragment(denemeLog: DenemeLog) : Fragment(), BaseNavigationFlows {
+class LoginFragment(private val listener: ViewPagerListeners) : Fragment(), BaseNavigationFlows {
 
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
     private lateinit var viewModelFactory: LoginViewModelFactory
-
-    private var koko = denemeLog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +56,8 @@ class LoginFragment(denemeLog: DenemeLog) : Fragment(), BaseNavigationFlows {
         when(type) {
             NavigationFragmentTypes.WELCOME -> {
                 viewModel.nextPageDirected()
-                //koko.takasi()
+                listener.viewPagerOnClicked(NavigationFragmentTypes.LOGIN)
                 findNavController().navigate(AuthenticationFragmentDirections.actionAuthenticationFragmentToWelcomeFragment())
-                //findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToWelcomeFragment())
             }
             else -> {
                 Timber.i("missing type")
