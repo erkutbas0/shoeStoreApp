@@ -10,12 +10,15 @@ import com.udacity.shoestore.databinding.ActivityMainBinding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import com.udacity.shoestore.sharedModules.SharedViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navigationController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    var sharedViewModel = SharedViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

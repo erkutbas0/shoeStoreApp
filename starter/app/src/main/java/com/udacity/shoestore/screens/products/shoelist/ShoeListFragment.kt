@@ -8,18 +8,29 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import com.udacity.shoestore.R
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.findNavController
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.udacity.shoestore.MainActivity
-import com.udacity.shoestore.databinding.ActivityMainBinding
+import com.udacity.shoestore.baseModules.BaseNavigationFlows
 import com.udacity.shoestore.databinding.FragmentShoeListBinding
+import com.udacity.shoestore.screens.models.NavigationFragmentTypes
+import com.udacity.shoestore.sharedModules.SharedViewModel
+import com.udacity.shoestore.sharedModules.SharedViewModel2
+import timber.log.Timber
 
-class ShoeListFragment : Fragment() {
+class ShoeListFragment : Fragment(), BaseNavigationFlows {
 
     private lateinit var binding: FragmentShoeListBinding
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationController: NavController
+
+    private lateinit var viewModel: ShoeListViewModel
+    private lateinit var viewModelFactory: ShoeListViewModelFactory
+
+    private val model: SharedViewModel by activityViewModels()
+    private var model2 = SharedViewModel2()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -27,11 +38,15 @@ class ShoeListFragment : Fragment() {
     ): View? {
 
         setupFragmentConfigurations(inflater, container)
-        setupNavigationControllerForActionBar()
+        initViewModel()
         setupMenuOptions()
         disableBackButton()
 
         //(activity as MainActivity).setupHamburgerMenuDrawer()
+
+        /*binding.addNewItemButton.setOnClickListener {
+            Timber.i("HOPPPAAAAAAA")
+        }*/
 
         return binding.root
     }
@@ -44,22 +59,6 @@ class ShoeListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shoe_list, container, false)
         drawerLayout = binding.mainActivityDrawerLayout
         navigationController = this.findNavController()
-    }
-
-    private fun setupNavigationControllerForActionBar() {
-        NavigationUI.setupWithNavController(binding.shoeListHamburgerMenu, navigationController)
-        addNavigationControllerListener()
-    }
-
-    private var navigationListener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
-        when(destination.id) {
-            controller.graph.startDestination -> drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            else -> drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        }
-    }
-
-    private fun addNavigationControllerListener() {
-        navigationController.addOnDestinationChangedListener(navigationListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -76,5 +75,39 @@ class ShoeListFragment : Fragment() {
             activity?.finish()
         }
     }
+
+    private fun initViewModel() {
+        viewModelFactory = ShoeListViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ShoeListViewModel::class.java)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+
+        addViewModelListeners()
+    }
+
+    private var observer = Observer<Boolean> { addNewItemClicked ->
+        if (addNewItemClicked) {
+            viewModel.onAddNewItemFired()
+            model.takasi()
+            gotoFragment(NavigationFragmentTypes.SHOE_DETAIL)
+            Timber.i("New item added clicked")
+        }
+    }
+
+    private fun addViewModelListeners() {
+        viewModel.onAddNewItemClicked.observe(this.viewLifecycleOwner, observer)
+    }
+
+    override fun gotoFragment(type: NavigationFragmentTypes) {
+        when(type) {
+            NavigationFragmentTypes.SHOE_DETAIL -> {
+                findNavController().navigate(ShoeListFragmentDirections.actionShoeListFragmentToShoeDetailFragment())
+            }
+            else -> {
+                // nothing
+            }
+        }
+    }
+
 
 }

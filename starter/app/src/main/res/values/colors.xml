@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="turquoiseButton">#3ACCE1</color>
+    <color name="cancelButtonBackground">#444F63</color>
     <color name="buttonWhileTitle">#FFFFFF</color>
     <color name="light_blue_grey_dm">#c9d2db</color>
     <color name="blue_grey_dm">#808d99</color>

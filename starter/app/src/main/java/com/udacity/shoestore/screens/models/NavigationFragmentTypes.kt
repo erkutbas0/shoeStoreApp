@@ -6,4 +6,5 @@ enum class NavigationFragmentTypes {
     INSTRUCTION,
     REGISTRATIION,
     SHOE_LIST,
+    SHOE_DETAIL,
 }

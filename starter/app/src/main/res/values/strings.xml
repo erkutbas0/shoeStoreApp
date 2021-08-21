@@ -5,6 +5,7 @@
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="login_button_text">Login</string>
+    <string name="done_button_text">Done</string>
     <string name="welcomeTitle">Welcome</string>
     <string name="instructionTitle">Instructions</string>
     <string name="welcomeSubtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
@@ -17,4 +18,6 @@
     <string name="register_button_text">Register</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">sign_up</string>
+    <string name="add_new_item_floating_button_content_description">button to add new item into shoe list</string>
+    <string name="cancel_button_text">Cancel</string>
 </resources>
